@@ -1,0 +1,15 @@
+{
+    "name": "dmitry/drupal.test",
+    "description": "drupal 7",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "dmitry",
+            "email": "zrayev@mail.ru"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+    }
+}
