@@ -1,20 +1,40 @@
 body {
-  font-size: 100%;
-  margin: 10px;
-  padding: 10px;
-  border: 0;
-  outline: 0;
-}
-a:link,
-a:visited {
-  text-decoration: none;
-}
-a:hover,
-a:active,
-a:focus {
-  text-decoration: underline;
+    color: #1c3d4c;
+    font-size: 100%;
 }
 
-a{
-    color: #42124c;
+h1 {
+    color: green;
+    float: left;
+    letter-spacing: 2px;
+    font-style: italic;
+}
+
+/* unvisited link */
+a:link {
+    color: red;
+}
+
+/* visited link */
+a:visited {
+    color: green;
+}
+
+/* mouse over link */
+a:hover {
+    /*color: hotpink;*/
+    text-decoration: underline;
+    background-color: lightgreen;
+}
+
+/* selected link */
+a:active {
+    color: blue;
+    text-decoration: underline;
+    font-variant: small-caps;
+
+}
+
+a:focus {
+    text-decoration: underline;
 }
