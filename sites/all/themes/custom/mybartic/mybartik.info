@@ -5,7 +5,7 @@ engine = phptemplate
 base theme = bartik
 
 stylesheets[all][] = css/colors.css
-stylesheets[print][] = css/mystyle.css
+stylesheets[all][]   = css/mystyle.css
 
 regions[header] = Header
 regions[help] = Help
