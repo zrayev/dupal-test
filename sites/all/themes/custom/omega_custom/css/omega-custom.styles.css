@@ -2,11 +2,17 @@ img, media {
   max-width: 100%;
 }
 
+html body.toolbar, html body.admin-menu {
+  padding: 10%;
+  margin: 0 10px ;
+}
+
 body {
   background-image: url('../images/flagua.jpg');
-  background-repeat: repeat-y;
-  background-position: center;
-  background-size: 82%;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 80% 80%;
+  background-attachment: fixed;
 }
 
 /* No files to import found in partials/components/**\/* */
