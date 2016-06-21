@@ -1,7 +1,7 @@
 <?php
 
-/**
- * @file
- * Template overrides as well as (pre-)process and alter hooks for the
- * Omega custom theme.
- */
+function THEMENAME_preprocess_page(&$variables) {
+  if (!empty($variables['node'])) {
+    $variables['theme_hook_suggestions'][] = 'page__' . $variables['node']->type;
+  }
+}

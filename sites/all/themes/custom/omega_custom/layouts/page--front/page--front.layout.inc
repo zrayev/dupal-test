@@ -15,4 +15,4 @@ regions[content]        = Content
 <!--regions[footer]         = Footer-->
 
 ; Stylesheets
-stylesheets[all][] = css/layouts/new/new.layout.css
+stylesheets[all][] = css/layouts/page--front/page--front.layout.css
