@@ -17,7 +17,11 @@
 function devel_create_users($num, $kill, $age = 0, $roles = array(), $pass = NULL) {
   $url = parse_url($GLOBALS['base_url']);
   if ($kill) {
-    $uids = db_select('users', 'u')->fields('u', array('uid'))->condition('uid', 1, '>')->execute()->fetchAllAssoc('uid');
+    $uids = db_select('users', 'u')
+            ->fields('u', array('uid'))
+            ->condition('uid', 1, '>')
+            ->execute()
+            ->fetchAllAssoc('uid');
     user_delete_multiple(array_keys($uids));
     drupal_set_message(format_plural(count($uids), '1 user deleted', '@count users deleted.'));
   }
@@ -41,15 +45,14 @@ function devel_create_users($num, $kill, $age = 0, $roles = array(), $pass = NUL
     }
     foreach ($names as $name => $value) {
       $edit = array(
-        'uid' => NULL,
-        'name' => $name,
-        'pass' => $pass,
-        'mail' => $name . '@' . $url['host'] . '.invalid',
-        'status' => 1,
+        'uid'     => NULL,
+        'name'    => $name,
+        'pass'    => $pass,
+        'mail'    => $name . '@' . $url['host'].'.invalid',
+        'status'  => 1,
         'created' => REQUEST_TIME - mt_rand(0, $age),
         'roles' => drupal_map_assoc($roles),
-        // A flag to let hook_user_* know that this is a generated user.
-        'devel_generate' => TRUE,
+        'devel_generate' => TRUE // A flag to let hook_user_* know that this is a generated user.
       );
 
       // Populate all core fields on behalf of field.module
@@ -80,7 +83,7 @@ function devel_create_users($num, $kill, $age = 0, $roles = array(), $pass = NUL
 
         // Create an empty, managed file where we want the user's picture to
         // be so we can have GD overwrite it with the image.
-        $picture_directory = variable_get('file_default_scheme', 'public') . '://' . variable_get('user_picture_path', 'pictures');
+        $picture_directory =  variable_get('file_default_scheme', 'public') . '://' . variable_get('user_picture_path', 'pictures');
         file_prepare_directory($picture_directory, FILE_CREATE_DIRECTORY);
         $destination = file_stream_wrapper_uri_normalize($picture_directory . '/picture-' . $account->uid . '.png');
         $file = file_save_data('', $destination);
@@ -102,14 +105,14 @@ function devel_create_users($num, $kill, $age = 0, $roles = array(), $pass = NUL
         // Save the user record with the new picture.
         $edit = (array) $account;
         $edit['picture'] = $file;
-        // Reassign password as it is replaced with the hashed version in $account
-        $edit['pass'] = $pass;
+        $edit['pass'] = $pass; // Reassign password as it is replaced with the hashed version in $account
         user_save($account, $edit);
       }
     }
   }
   drupal_set_message(t('!num_users created.', array('!num_users' => format_plural($num, '1 user', '@count users'))));
 }
+
 
 /**
  * The main API function for creating content.
@@ -121,7 +124,6 @@ function devel_create_users($num, $kill, $age = 0, $roles = array(), $pass = NUL
  * form.
  *
  * @param string $form_state
- *
  * @return void
  */
 function devel_generate_content($form_state) {
@@ -137,7 +139,7 @@ function devel_generate_content($form_state) {
       devel_generate_content_add_node($form_state['values']);
       if (function_exists('drush_log') && $i % drush_get_option('feedback', 1000) == 0) {
         $now = time();
-        drush_log(dt('Completed !feedback nodes (!rate nodes/min)', array('!feedback' => drush_get_option('feedback', 1000), '!rate' => (drush_get_option('feedback', 1000) * 60) / ($now - $start))), 'ok');
+        drush_log(dt('Completed !feedback nodes (!rate nodes/min)', array('!feedback' => drush_get_option('feedback', 1000), '!rate' => (drush_get_option('feedback', 1000)*60)/($now-$start))), 'ok');
         $start = $now;
       }
     }
@@ -160,11 +162,9 @@ function devel_generate_add_comments($node, $users, $max_comments, $title_length
       case 1:
         $comment->pid = db_query_range("SELECT cid FROM {comment} WHERE pid = 0 AND nid = :nid ORDER BY RAND()", 0, 1, array(':nid' => $comment->nid))->fetchField();
         break;
-
       case 2:
         $comment->pid = db_query_range("SELECT cid FROM {comment} WHERE pid > 0 AND nid = :nid ORDER BY RAND()", 0, 1, array(':nid' => $comment->nid))->fetchField();
         break;
-
       default:
         $comment->pid = 0;
     }
@@ -189,7 +189,7 @@ function devel_generate_vocabs($records, $maxlength = 12, $types = array('page',
     $voc = new stdClass();
     $voc->name = devel_generate_word(mt_rand(2, $maxlength));
     $voc->machine_name = drupal_strtolower($voc->name);
-    $voc->description = "description of " . $voc->name;
+    $voc->description = "description of ". $voc->name;
     // TODO: not working
     $voc->nodes = array_flip(array($types[array_rand($types)]));
     foreach ($voc->nodes as $key => $value) {
@@ -200,7 +200,7 @@ function devel_generate_vocabs($records, $maxlength = 12, $types = array('page',
     $voc->required = 0;
     $voc->relations = 1;
     $voc->hierarchy = 1;
-    $voc->weight = mt_rand(0, 10);
+    $voc->weight = mt_rand(0,10);
     $voc->language = LANGUAGE_NONE;
 
     taxonomy_vocabulary_save($voc);
@@ -220,7 +220,6 @@ function devel_generate_vocabs($records, $maxlength = 12, $types = array('page',
  *   array list of vocabs to populate.
  * @param $maxlength
  *   int maximum length per term.
- *
  * @return
  *   array the list of names of the created terms.
  */
@@ -241,14 +240,20 @@ function devel_generate_terms($records, $vocabs, $maxlength = 12) {
         // Don't set a parent. Handled by taxonomy_save_term()
         // $term->parent = 0;
         break;
-
       default:
         while (TRUE) {
           // Keep trying to find a random parent.
           $candidate = mt_rand(1, $max);
           $query = db_select('taxonomy_term_data', 't');
           $query->innerJoin('taxonomy_vocabulary', 'v', 't.vid = v.vid');
-          $parent = $query->fields('t', array('tid', 'vid'))->fields('v', array('machine_name'))->condition('v.vid', array_keys($vocabs), 'IN')->condition('t.tid', $candidate, '>=')->range(0, 1)->execute()->fetchAssoc();
+          $parent = $query
+                    ->fields('t', array('tid', 'vid'))
+                    ->fields('v', array('machine_name'))
+                    ->condition('v.vid', array_keys($vocabs), 'IN')
+                    ->condition('t.tid', $candidate, '>=')
+                    ->range(0,1)
+                    ->execute()
+                    ->fetchAssoc();
           if ($parent['tid']) {
             break;
           }
@@ -261,7 +266,7 @@ function devel_generate_terms($records, $vocabs, $maxlength = 12) {
     }
 
     $term->name = devel_generate_word(mt_rand(2, $maxlength));
-    $term->description = "description of " . $term->name;
+    $term->description = "description of ". $term->name;
     $term->format = filter_fallback_format();
     $term->weight = mt_rand(0, 10);
     $term->language = LANGUAGE_NONE;
@@ -276,7 +281,7 @@ function devel_generate_terms($records, $vocabs, $maxlength = 12) {
         $feedback = drush_get_option('feedback', 1000);
         if ($i % $feedback == 0) {
           $now = time();
-          drush_log(dt('Completed !feedback terms (!rate terms/min)', array('!feedback' => $feedback, '!rate' => $feedback * 60 / ($now - $start))), 'ok');
+          drush_log(dt('Completed !feedback terms (!rate terms/min)', array('!feedback' => $feedback, '!rate' => $feedback*60 / ($now-$start) )), 'ok');
           $start = $now;
         }
       }
@@ -294,7 +299,12 @@ function devel_generate_terms($records, $vocabs, $maxlength = 12) {
 
 // TODO: use taxonomy_get_entries once that exists.
 function devel_generate_get_terms($vids) {
-  return db_select('taxonomy_term_data', 'td')->fields('td', array('tid'))->condition('vid', $vids, 'IN')->orderBy('tid', 'ASC')->execute()->fetchCol('tid');
+  return db_select('taxonomy_term_data', 'td')
+           ->fields('td', array('tid'))
+           ->condition('vid', $vids, 'IN')
+           ->orderBy('tid', 'ASC')
+           ->execute()
+           ->fetchCol('tid');
 }
 
 /**
@@ -331,9 +341,12 @@ function devel_generate_delete_menus() {
     }
   }
   // Delete menu links generated by devel.
-  // Look for the serialized version of 'devel' => TRUE.
-  $result = db_select('menu_links', 'm')->fields('m', array('mlid'))->condition('m.menu_name', 'devel', '<>')
-  ->condition('m.options', '%' . db_like('s:5:"devel";b:1') . '%', 'LIKE')->execute();
+  $result = db_select('menu_links', 'm')
+    ->fields('m', array('mlid'))
+    ->condition('m.menu_name', 'devel', '<>')
+    // Look for the serialized version of 'devel' => TRUE.
+    ->condition('m.options', '%' . db_like('s:5:"devel";b:1') . '%', 'LIKE')
+    ->execute();
   foreach ($result as $link) {
     menu_link_delete($link->mlid);
   }
@@ -375,11 +388,11 @@ function devel_generate_links($num_links, $menus, $title_length, $link_types, $m
     $menu_name = $menus[array_rand($menus)];
     // Build up our link.
     $link = array(
-      'menu_name' => $menu_name,
-      'options' => array('devel' => TRUE),
-      'weight' => mt_rand(-50, 50),
-      'mlid' => 0,
-      'link_title' => devel_generate_word(mt_rand(2, max(2, $title_length))),
+      'menu_name'   => $menu_name,
+      'options'     => array('devel' => TRUE),
+      'weight'      => mt_rand(-50, 50),
+      'mlid'        => 0,
+      'link_title'  => devel_generate_word(mt_rand(2, max(2, $title_length))),
     );
     $link['options']['attributes']['title'] = t('Description of @title.', array('@title' => $link['link_title']));
 
@@ -393,7 +406,14 @@ function devel_generate_links($num_links, $menus, $title_length, $link_types, $m
     }
     // Get a random parent link from the proper depth.
     do {
-      $link['plid'] = db_select('menu_links', 'm')->fields('m', array('mlid'))->condition('m.menu_name', $menus, 'IN')->condition('m.depth', $depth)->range(0, 1)->orderRandom()->execute()->fetchField();
+      $link['plid'] = db_select('menu_links', 'm')
+        ->fields('m', array('mlid'))
+        ->condition('m.menu_name', $menus, 'IN')
+        ->condition('m.depth', $depth)
+        ->range(0, 1)
+        ->orderRandom()
+        ->execute()
+        ->fetchField();
       $depth--;
     } while (!$link['plid'] && $depth > 0);
     if (!$link['plid']) {
@@ -404,7 +424,11 @@ function devel_generate_links($num_links, $menus, $title_length, $link_types, $m
     switch ($link_types[$link_type]) {
       case 'node':
         // Grab a random node ID.
-        $select = db_select('node', 'n')->fields('n', array('nid', 'title'))->condition('n.status', 1)->range(0, 1)->orderRandom();
+        $select = db_select('node', 'n')
+          ->fields('n', array('nid', 'title'))
+          ->condition('n.status', 1)
+          ->range(0, 1)
+          ->orderRandom();
         // Don't put a node into the menu twice.
         if (!empty($nids[$menu_name])) {
           $select->condition('n.nid', $nids[$menu_name], 'NOT IN');
@@ -419,11 +443,9 @@ function devel_generate_links($num_links, $menus, $title_length, $link_types, $m
       case 'external':
         $link['link_path'] = 'http://www.example.com/';
         break;
-
       case 'front':
         $link['link_path'] = $link['router_path'] = '<front>';
         break;
-
       default:
         $link['devel_link_type'] = $link_type;
         break;
@@ -437,19 +459,18 @@ function devel_generate_links($num_links, $menus, $title_length, $link_types, $m
   return $links;
 }
 
-function devel_generate_word($length) {
-  mt_srand((double)microtime() * 1000000);
+function devel_generate_word($length){
+  mt_srand((double)microtime()*1000000);
 
   $vowels = array("a", "e", "i", "o", "u");
   $cons = array("b", "c", "d", "g", "h", "j", "k", "l", "m", "n", "p", "r", "s", "t", "u", "v", "w", "tr",
-    "cr", "br", "fr", "th", "dr", "ch", "ph", "wr", "st", "sp", "sw", "pr", "sl", "cl", "sh",
-  );
+  "cr", "br", "fr", "th", "dr", "ch", "ph", "wr", "st", "sp", "sw", "pr", "sl", "cl", "sh");
 
   $num_vowels = count($vowels);
   $num_cons = count($cons);
   $word = '';
 
-  while (strlen($word) < $length) {
+  while(strlen($word) < $length){
     $word .= $cons[mt_rand(0, $num_cons - 1)] . $vowels[mt_rand(0, $num_vowels - 1)];
   }
 
@@ -457,11 +478,11 @@ function devel_generate_word($length) {
 }
 
 function devel_create_content($type = NULL) {
-  $nparas = mt_rand(1, 12);
-  $type = empty($type) ? mt_rand(0, 3) : $type;
+  $nparas = mt_rand(1,12);
+  $type = empty($type) ? mt_rand(0,3) : $type;
 
   $output = "";
-  switch ($type % 3) {
+  switch($type % 3) {
     // MW: This appears undesireable. Was giving <p> in text fields
     // case 1: // html
     //       for ($i = 1; $i <= $nparas; $i++) {
@@ -475,10 +496,9 @@ function devel_create_content($type = NULL) {
     //       }
     //       break;
 
-    default:
-      // plain text
+    default: // plain text
       for ($i = 1; $i <= $nparas; $i++) {
-        $output .= devel_create_para(mt_rand(10, 60)) . "\n\n";
+        $output .= devel_create_para(mt_rand(10,60)) ."\n\n";
       }
   }
 
@@ -489,7 +509,7 @@ function devel_create_para($words, $type = 0) {
   $output = '';
   switch ($type) {
     case 1:
-      $output .= "<p>" . devel_create_greeking($words) . "</p>";
+      $output .= "<p>" . devel_create_greeking($words)  . "</p>";
       break;
 
     case 2:
@@ -532,8 +552,7 @@ function devel_create_greeking($word_count, $title = FALSE) {
     "utrum", "uxor", "valde", "valetudo", "validus", "vel", "velit",
     "veniam", "venio", "vereor", "vero", "verto", "vicis", "vindico",
     "virtus", "voco", "volutpat", "vulpes", "vulputate", "wisi", "ymo",
-    "zelus",
-  );
+    "zelus");
   $dictionary_flipped = array_flip($dictionary);
 
   $greeking = '';
@@ -565,8 +584,8 @@ function devel_generate_add_terms(&$node) {
   $vocabs = taxonomy_get_vocabularies($node->type);
   foreach ($vocabs as $vocab) {
     $sql = "SELECT tid FROM {taxonomy_term_data} WHERE vid = :vid ORDER BY RAND()";
-    $result = db_query_range($sql, 0, 5, array(':vid' => $vocab->vid));
-    foreach ($result as $row) {
+    $result = db_query_range($sql, 0, 5 , array(':vid' => $vocab->vid));
+    foreach($result as $row) {
       $node->taxonomy[] = $row->tid;
       if (!$vocab->multiple) {
         break;
@@ -608,7 +627,10 @@ function devel_generate_add_statistics($node) {
  *   array of options obtained from devel_generate_content_form.
  */
 function devel_generate_content_kill($values) {
-  $results = db_select('node', 'n')->fields('n', array('nid'))->condition('type', $values['node_types'], 'IN')->execute();
+  $results = db_select('node', 'n')
+              ->fields('n', array('nid'))
+              ->condition('type', $values['node_types'], 'IN')
+              ->execute();
   foreach ($results as $result) {
     $nids[] = $result->nid;
   }
@@ -650,7 +672,7 @@ function devel_generate_content_add_node(&$results) {
   $users = $results['users'];
   $node->uid = $users[array_rand($users)];
   $type = node_type_get_type($node);
-  $node->revision = mt_rand(0, 1);
+  $node->revision = mt_rand(0,1);
   $node->promote = mt_rand(0, 1);
 
   if ($type->has_title) {
@@ -695,7 +717,6 @@ function devel_generate_set_language($results, $object) {
   }
   else {
     $default = language_default('language');
-    $object->language = $default == 'en' ? LANGUAGE_NONE : $default;
+    $object->language =  $default == 'en' ? LANGUAGE_NONE : $default;
   }
 }
-

@@ -28,10 +28,8 @@ function devel_generate_fields(&$object, $obj_type, $bundle) {
     else {
       switch ($field['cardinality']) {
         case FIELD_CARDINALITY_UNLIMITED:
-          // just an arbitrary number for 'unlimited'
-          $max = rand(0, 3);
+          $max = rand(0, 3); //just an arbitrary number for 'unlimited'
           break;
-
         default:
           $max = $field['cardinality'] - 1;
           break;
@@ -67,7 +65,7 @@ function devel_generate_fields(&$object, $obj_type, $bundle) {
     // initializes the property with incorrect data.
     // @see http://drupal.org/node/652176
     $object->{$field['field_name']} = array(
-      $field['translatable'] ? $object->language : LANGUAGE_NONE => $object_field,
+      $field['translatable'] ?  $object->language : LANGUAGE_NONE => $object_field,
     );
   }
 }
@@ -83,10 +81,8 @@ function devel_generate_multiple($function, $object, $field, $instance, $bundle)
   if (function_exists($function)) {
     switch ($field['cardinality']) {
       case FIELD_CARDINALITY_UNLIMITED:
-        // just an arbitrary number for 'unlimited'
-        $max = rand(0, 3);
+        $max = rand(0, 3); //just an arbitrary number for 'unlimited'
         break;
-
       default:
         $max = $field['cardinality'] - 1;
         break;
@@ -100,4 +96,3 @@ function devel_generate_multiple($function, $object, $field, $instance, $bundle)
   }
   return $object_field;
 }
-

@@ -24,14 +24,11 @@ function devel_help($section) {
   switch ($section) {
     case 'devel/reference':
       return '<p>' . t('This is a list of defined user functions that generated this current request lifecycle. Click on a function name to view its documentation.') . '</p>';
-
     case 'devel/session':
       return '<p>' . t('Here are the contents of your <code>$_SESSION</code> variable.') . '</p>';
-
     case 'devel/variable':
       $api = variable_get('devel_api_url', 'api.drupal.org');
       return '<p>' . t('This is a list of the variables and their values currently stored in variables table and the <code>$conf</code> array of your settings.php file. These variables are usually accessed with <a href="@variable-get-doc">variable_get()</a> and <a href="@variable-set-doc">variable_set()</a>. Variables that are too long can slow down your pages.', array('@variable-get-doc' => "http://$api/api/HEAD/function/variable_get", '@variable-set-doc' => "http://$api/api/HEAD/function/variable_set")) . '</p>';
-
     case 'devel/reinstall':
       return t('Warning - will delete your module tables and variables.');
   }
@@ -354,8 +351,7 @@ function devel_admin_paths() {
  */
 function devel_menu_need_destination() {
   return array('devel/cache/clear', 'devel/reinstall', 'devel/menu/reset',
-    'devel/variable', 'admin/reports/status/run-cron',
-  );
+    'devel/variable', 'admin/reports/status/run-cron');
 }
 
 /**
@@ -413,7 +409,7 @@ function devel_init() {
 
       // See http://www.firephp.org/HQ/Install.htm
       $path = NULL;
-      if ((@include_once'fb.php') || (@include_once'FirePHPCore/fb.php')) {
+      if ((@include_once 'fb.php') || (@include_once 'FirePHPCore/fb.php')) {
         // FirePHPCore is in include_path. Probably a PEAR installation.
         $path = '';
       }
@@ -461,15 +457,15 @@ function devel_init() {
  * Sets message.
  */
 function devel_set_message($msg, $type = NULL) {
-  $function = function_exists('drush_log') ? 'drush_log' : 'drupal_set_message';
+  $function  = function_exists('drush_log') ? 'drush_log' : 'drupal_set_message';
   $function($msg, $type);
-}
+  }
 
 /**
  * Returns boolean. No need for cache here.
  */
 function has_krumo() {
-  @include_onceDRUPAL_ROOT . '/' . drupal_get_path('module', 'devel') . '/krumo/class.krumo.php';
+  @include_once DRUPAL_ROOT . '/' . drupal_get_path('module', 'devel') . '/krumo/class.krumo.php';
   if (function_exists('krumo') && !drupal_is_cli()) {
     drupal_add_js(drupal_get_path('module', 'devel') . '/devel_krumo_path.js');
     return TRUE;
@@ -519,7 +515,7 @@ function dcp() {
 /**
  * Implements hook_watchdog().
  */
-function devel_watchdog(array$log_entry) {
+function devel_watchdog(array $log_entry) {
   if (class_exists('FirePHP', FALSE) && !drupal_is_cli()) {
     switch ($log_entry['severity']) {
       case WATCHDOG_EMERGENCY:
@@ -591,13 +587,18 @@ function devel_set_handler($handlers) {
 function devel_silent() {
   // isset($_GET['q']) is needed when calling the front page. q is not set.
   // Don't interfere with private files/images.
-  return function_exists('drupal_is_cli') && drupal_is_cli() || (isset($_SERVER['HTTP_USER_AGENT']) && strpos($_SERVER['HTTP_USER_AGENT'], 'ApacheBench') !== FALSE) || !empty($_REQUEST['XDEBUG_PROFILE']) || isset($GLOBALS['devel_shutdown']) || strstr($_SERVER['PHP_SELF'], 'update.php') || (isset($_GET['q']) && (
+  return
+    function_exists('drupal_is_cli') && drupal_is_cli() ||
+    (isset($_SERVER['HTTP_USER_AGENT']) && strpos($_SERVER['HTTP_USER_AGENT'], 'ApacheBench') !== FALSE) ||
+    !empty($_REQUEST['XDEBUG_PROFILE']) ||
+    isset($GLOBALS['devel_shutdown']) ||
+    strstr($_SERVER['PHP_SELF'], 'update.php') ||
+    (isset($_GET['q']) && (
       in_array($_GET['q'], array('admin/content/node-settings/rebuild')) ||
       substr($_GET['q'], 0, strlen('system/files')) == 'system/files' ||
       substr($_GET['q'], 0, strlen('batch')) == 'batch' ||
-      substr($_GET['q'], 0, strlen('file/ajax')) == 'file/ajax'
-    )
-  );
+      substr($_GET['q'], 0, strlen('file/ajax')) == 'file/ajax')
+    );
 }
 
 /**
@@ -637,7 +638,7 @@ function devel_boot() {
     }
 
     if (devel_query_enabled()) {
-      @include_onceDRUPAL_ROOT . '/includes/database/log.inc';
+      @include_once DRUPAL_ROOT . '/includes/database/log.inc';
       Database::startLog('devel');;
     }
   }
@@ -682,15 +683,15 @@ function backtrace_error_handler($error_level, $message, $filename, $line, $cont
       }
       // We treat recoverable errors as fatal.
       _drupal_log_error(array(
-          '%type' => isset($types[$error_level]) ? $severity_msg : 'Unknown error',
-          // The standard PHP error handler considers that the error messages
-          // are HTML. We mimick this behavior here.
-          '!message' => filter_xss_admin($message),
-          '%function' => $caller['function'],
-          '%file' => $caller['file'],
-          '%line' => $caller['line'],
-          'severity_level' => $severity_level,
-        ), $error_level == E_RECOVERABLE_ERROR);
+        '%type' => isset($types[$error_level]) ? $severity_msg : 'Unknown error',
+        // The standard PHP error handler considers that the error messages
+        // are HTML. We mimick this behavior here.
+        '!message' => filter_xss_admin($message),
+        '%function' => $caller['function'],
+        '%file' => $caller['file'],
+        '%line' => $caller['line'],
+        'severity_level' => $severity_level,
+      ), $error_level == E_RECOVERABLE_ERROR);
     }
     return;
   }
@@ -1026,9 +1027,7 @@ function devel_switch_user_form_submit($form, &$form_state) {
       'query' => array(
         'destination' => '',
         'token' => drupal_get_token($path . '|'),
-      ),
-    ),
-  );
+    )));
 }
 
 /**
@@ -1071,6 +1070,7 @@ function devel_library_alter(&$libraries, $module) {
       if (!devel_silent() && user_access('access devel information')) {
         drupal_set_message(t('jQuery could not be replaced with an uncompressed version of 1.4.4, because jQuery @version is running on the site.', array('@version' => $libraries['jquery']['version'])));
       }
+
     }
   }
 }
@@ -1133,8 +1133,7 @@ function devel_shutdown_real() {
       $header = drupal_get_http_header('content-type');
       if ($header) {
         $formats = array('xml', 'javascript', 'json', 'plain', 'image',
-          'application', 'csv', 'x-comma-separated-values',
-        );
+          'application', 'csv', 'x-comma-separated-values');
         foreach ($formats as $format) {
           if (strstr($header, $format)) {
             return;
@@ -1224,7 +1223,7 @@ function devel_shutdown_memory() {
     $args = array(
       '@memory_boot' => round($memory_init / 1024 / 1024, 2),
       '@memory_shutdown' => round($memory_shutdown / 1024 / 1024, 2),
-      '@memory_peak' => round(memory_get_peak_usage(TRUE) / 1024 / 1024, 2),
+      '@memory_peak' => round(memory_get_peak_usage(TRUE) / 1024 / 1024, 2)
     );
     $msg = '<span class="dev-memory-usages"> Memory used at: devel_boot()=<strong>@memory_boot</strong> MB, devel_shutdown()=<strong>@memory_shutdown</strong> MB, PHP peak=<strong>@memory_peak</strong> MB.</span>';
     // theme() may not be available. not t() either.
@@ -1302,8 +1301,7 @@ function devel_query_summary($queries) {
     return array(
       $counts,
       t_safe('Executed @queries queries in @time ms.',
-        array('@queries' => count($queries), '@time' => round($sum * 1000, 2))
-      ),
+      array('@queries' => count($queries), '@time' => round($sum * 1000, 2))),
     );
   }
 }
@@ -1489,9 +1487,9 @@ function devel_print_object($object, $prefix = NULL, $header = TRUE) {
   $output = '<div class="devel-obj-output">';
   if ($header) {
     $output .= '<h3>' . t('Display of !type !obj', array(
-        '!type' => str_replace(array('$', '->'), '', $prefix),
-        '!obj' => gettype($object),
-      )
+      '!type' => str_replace(array('$', '->'), '', $prefix),
+      '!obj' => gettype($object),
+    )
     ) . '</h3>';
   }
   $output .= _devel_print_object($object, $prefix);
@@ -1577,12 +1575,10 @@ function _devel_print_object($obj, $prefix = NULL, $parents = NULL, $object = FA
               $summary = format_plural(drupal_strlen($value), '1 character', '@count characters');
             }
             break;
-
           case 'array':
           case 'object':
             $summary = format_plural(count((array) $value), '1 element', '@count elements');
             break;
-
           case 'boolean':
             $summary = $value ? t('TRUE') : t('FALSE');
             break;
@@ -1648,28 +1644,25 @@ function devel_query_table($queries, $counts) {
     $cell[$i][] = $count;
     $cell[$i][] = l($function, "http://$api/api/function/$function/$version");
     $ops[] = l(t('P'), '', array(
-        'attributes' => array(
-          'title' => 'Show placeholders',
-          'class' => array('dev-placeholders'),
-          'qid' => $i,
-        ),
-      ));
+      'attributes' => array(
+        'title' => 'Show placeholders',
+        'class' => array('dev-placeholders'),
+        'qid' => $i,
+    )));
     $ops[] = l(t('A'), '', array(
         'attributes' => array(
           'title' => 'Show arguments',
           'class' => array('dev-arguments'),
           'qid' => $i,
-        ),
-      ));
+    )));
     // EXPLAIN only valid for select queries.
     if (strpos($query['query'], 'UPDATE') === FALSE && strpos($query['query'], 'INSERT') === FALSE && strpos($query['query'], 'DELETE') === FALSE) {
       $ops[] = l(t('E'), '', array(
-          'attributes' => array(
-            'title' => 'Show EXPLAIN',
-            'class' => array('dev-explain'),
-            'qid' => $i,
-          ),
-        ));
+        'attributes' => array(
+          'title' => 'Show EXPLAIN',
+          'class' => array('dev-explain'),
+          'qid' => $i,
+      )));
     }
     $cell[$i][] = implode(' ', $ops);
     // 3 divs for each variation of the query. Last 2 are hidden by default.
@@ -1758,7 +1751,7 @@ function _devel_table_sort($a, $b) {
     return 1;
   }
   if ($a > $b) {
-    return - 1;
+    return -1;
   }
   return 0;
 }
@@ -1827,7 +1820,6 @@ function dargs($always = TRUE) {
  *   and return $query instead.
  * @param string $name
  *   Optional name for identifying the output.
- *
  * @return object|string
  *   The $query object, or the query string if $return was TRUE.
  */
@@ -1946,7 +1938,7 @@ function kprint_r($input, $return = FALSE, $name = NULL, $function = 'print_r') 
  * Displays only for users with proper permissions. If
  * you want a string returned instead of a print, use the 2nd param.
  */
-function dprint_r($input, $return = FALSE, $name = NULL, $function = 'print_r', $check = TRUE) {
+function dprint_r($input, $return = FALSE, $name = NULL, $function = 'print_r', $check= TRUE) {
   if (user_access('access devel information')) {
     if ($name) {
       $name .= ' => ';
@@ -2115,7 +2107,9 @@ function devel_rebuild_node_comment_statistics() {
   $query->addExpression('NULL', 'last_comment_name');
   $query->isNull('ncs.comment_count');
 
-  db_insert('node_comment_statistics', array('return' => Database::RETURN_NULL))->from($query)->execute();
+  db_insert('node_comment_statistics', array('return' => Database::RETURN_NULL))
+    ->from($query)
+    ->execute();
 }
 
 /**
@@ -2158,4 +2152,3 @@ function devel_form_system_modules_alter(&$form, &$form_state) {
     }
   }
 }
-

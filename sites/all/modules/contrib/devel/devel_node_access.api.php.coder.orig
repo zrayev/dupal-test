@@ -76,4 +76,3 @@ function hook_node_access_acknowledge($grant) {
 /**
  * @} End of "addtogroup hooks".
  */
-

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @file
  * MailSystemInterface for logging mails to the filesystem.
@@ -16,6 +15,7 @@
  * 'devel_debug_mail_file_format' variable.
  *
  */
+
 class DevelMailLog extends DefaultMailSystem {
 
   public function composeMessage($message) {
@@ -51,7 +51,6 @@ class DevelMailLog extends DefaultMailSystem {
   private function dirify($string) {
     return preg_replace('/[^a-zA-Z0-9_\-\.@]/', '_', $string);
   }
-
   /**
    * Save an e-mail message to a file, using Drupal variables and default settings.
    *
@@ -60,11 +59,10 @@ class DevelMailLog extends DefaultMailSystem {
    *
    * @param $message
    *   A message array, as described in hook_mail_alter().
-   *
    * @return
    *   TRUE if the mail was successfully accepted, otherwise FALSE.
    */
-  public function mail(array$message) {
+  public function mail(array $message) {
     $output = $this->composeMessage($message);
     $output_file = $this->getFileName($message);
 
@@ -81,5 +79,4 @@ class DevelMailLog extends DefaultMailSystem {
     return variable_get('devel_debug_mail_directory', 'temporary://devel-mails');
   }
 }
-
-
+?>

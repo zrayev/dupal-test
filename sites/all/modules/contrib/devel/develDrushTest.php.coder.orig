@@ -1,4 +1,5 @@
 <?php
+
 /*
  * @file
  *   PHPUnit Tests for devel. This uses Drush's own test framework, based on PHPUnit.
@@ -22,4 +23,3 @@ class develCase extends Drush_CommandTestCase {
     $this->assertContains('function drush_main() {', $output, 'Output contains function drush_main() declaration');
   }
 }
-

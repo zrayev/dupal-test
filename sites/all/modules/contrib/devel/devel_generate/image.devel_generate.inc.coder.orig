@@ -1,5 +1,7 @@
 <?php
+
 define('DEVEL_GENERATE_IMAGE_MAX', 5);
+
 function image_devel_generate($object, $field, $instance, $bundle) {
   if (function_exists('imagejpeg')) {
     $devel_generate_image_function = variable_get('devel_generate_image_function', '_image_devel_generate');
@@ -29,8 +31,7 @@ function _image_devel_generate($object, $field, $instance, $bundle) {
     if ($path = devel_generate_image($extension, $min_resolution, $max_resolution)) {
       $source = new stdClass();
       $source->uri = $path;
-      // TODO: randomize? Use case specific.
-      $source->uid = 1;
+      $source->uid = 1; // TODO: randomize? Use case specific.
       $source->filemime = 'image/' . pathinfo($path, PATHINFO_EXTENSION);
       $source->filename = basename($path);
       $destination_dir = $field['settings']['uri_scheme'] . '://' . $instance['settings']['file_directory'];
@@ -75,20 +76,19 @@ function devel_generate_image($extension = 'png', $min_resolution, $max_resoluti
     $im = imagecreate($width, $height);
     for ($n = 0; $n < 4; $n++) {
       $color = imagecolorallocate($im, rand(0, 255), rand(0, 255), rand(0, 255));
-      $x = $width / 2 * ($n % 2);
-      $y = $height / 2 * (int)($n >= 2);
-      imagefilledrectangle($im, $x, $y, $x + $width / 2, $y + $height / 2, $color);
+      $x = $width/2 * ($n % 2);
+      $y = $height/2 * (int) ($n >= 2);
+      imagefilledrectangle($im, $x, $y, $x + $width/2, $y + $height/2, $color);
     }
 
     // Make a perfect circle in the image middle.
     $color = imagecolorallocate($im, rand(0, 255), rand(0, 255), rand(0, 255));
     $smaller_dimension = min($width, $height);
     $smaller_dimension = ($smaller_dimension % 2) ? $smaller_dimension : $smaller_dimension;
-    imageellipse($im, $width / 2, $height / 2, $smaller_dimension, $smaller_dimension, $color);
+    imageellipse($im, $width/2, $height/2, $smaller_dimension, $smaller_dimension, $color);
 
-    $save_function = 'image' . ($extension == 'jpg' ? 'jpeg' : $extension);
+    $save_function = 'image'. ($extension == 'jpg' ? 'jpeg' : $extension);
     $save_function($im, drupal_realpath($destination));
   }
   return $destination;
 }
-

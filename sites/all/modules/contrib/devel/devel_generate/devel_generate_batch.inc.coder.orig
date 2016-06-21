@@ -7,6 +7,7 @@
 /**
  * Functions called from FAPI:
  */
+
 function devel_generate_batch_content($form_state) {
   $operations = array();
 
@@ -19,7 +20,7 @@ function devel_generate_batch_content($form_state) {
   }
 
   // add the operations to create the nodes
-  for ($num = 0; $num < $form_state['values']['num_nodes']; $num++) {
+  for ($num = 0; $num < $form_state['values']['num_nodes']; $num ++) {
     $operations[] = array('devel_generate_batch_content_add_node', array());
   }
 
@@ -36,6 +37,7 @@ function devel_generate_batch_content($form_state) {
 /**
  * Create Content Batch Functions:
  */
+
 function devel_generate_batch_content_kill(&$context) {
   module_load_include('inc', 'devel_generate', 'devel_generate');
   devel_generate_content_kill($context['results']);
@@ -51,7 +53,7 @@ function devel_generate_batch_content_pre_node($vars, &$context) {
 function devel_generate_batch_content_add_node(&$context) {
   module_load_include('inc', 'devel_generate', 'devel_generate');
   devel_generate_content_add_node($context['results']);
-  $context['results']['num_nids']++;
+  $context['results']['num_nids'] ++;
 }
 
 function devel_generate_batch_finished($success, $results, $operations) {

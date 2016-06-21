@@ -1,4 +1,5 @@
 <?php
+
 // Menu callback that shows menu item.
 function devel_menu_item() {
   $item = menu_get_item($_GET['path']);
@@ -169,12 +170,13 @@ function devel_variable_form() {
     case 'mssql':
       $query->addExpression("LEN(v.value)", 'length');
       break;
-
     default:
       $query->addExpression("LENGTH(v.value)", 'length');
       break;
   }
-  $result = $query->orderByHeader($header)->execute();
+  $result = $query
+    ->orderByHeader($header)
+    ->execute();
 
   foreach ($result as $row) {
     // $variables[$row->name] = '';
@@ -184,7 +186,7 @@ function devel_variable_form() {
     }
     else {
       if (drupal_strlen($row->value) > 70) {
-        $value = check_plain(drupal_substr($row->value, 0, 65)) . '...';
+        $value = check_plain(drupal_substr($row->value, 0, 65)) .'...';
       }
       else {
         $value = check_plain($row->value);
@@ -205,7 +207,7 @@ function devel_variable_form() {
     '#value' => t('Delete'),
   );
 
-  // krumo($form);
+    // krumo($form);
   return $form;
 }
 
@@ -221,7 +223,7 @@ function devel_variable_edit($form, &$form_state, $name) {
   $value = variable_get($name, 'not found');
   $form['name'] = array(
     '#type' => 'value',
-    '#value' => $name,
+    '#value' => $name
   );
   $form['value'] = array(
     '#type' => 'item',
@@ -232,7 +234,7 @@ function devel_variable_edit($form, &$form_state, $name) {
     $form['new'] = array(
       '#type' => 'textarea',
       '#title' => t('New value'),
-      '#default_value' => $value,
+      '#default_value' => $value
     );
     $form['submit'] = array(
       '#type' => 'submit',
@@ -244,7 +246,7 @@ function devel_variable_edit($form, &$form_state, $name) {
     $form['new'] = array(
       '#type' => 'item',
       '#title' => t('New value'),
-      '#markup' => t('Sorry, complex variable types may not be edited yet. Use the <em>Execute PHP</em> block and the <a href="@variable-set-doc">variable_set()</a> function.', array('@variable-set-doc' => "http://$api/api/HEAD/function/variable_set")),
+      '#markup' => t('Sorry, complex variable types may not be edited yet. Use the <em>Execute PHP</em> block and the <a href="@variable-set-doc">variable_set()</a> function.', array('@variable-set-doc' => "http://$api/api/HEAD/function/variable_set"))
     );
   }
   drupal_set_title($name);
@@ -254,7 +256,7 @@ function devel_variable_edit($form, &$form_state, $name) {
 function devel_variable_edit_submit($form, &$form_state) {
   variable_set($form_state['values']['name'], $form_state['values']['new']);
   drupal_set_message(t('Saved new value for %name.', array('%name' => $form_state['values']['name'])));
-  'devel/variable';
+   'devel/variable';
 }
 
 /**
@@ -273,7 +275,7 @@ function devel_session() {
  */
 function devel_load_object($type, $object, $name = NULL) {
   $name = isset($name) ? $name : $type;
-  return kdevel_print_object($object, '$' . $name . '->');
+  return kdevel_print_object($object, '$'. $name .'->');
 }
 
 /**
@@ -283,7 +285,7 @@ function devel_render_object($type, $object, $name = NULL) {
   $name = isset($name) ? $name : $type;
   $function = $type . '_view';
   $build = $function($object);
-  return kdevel_print_object($build, '$' . $name . '->');
+  return kdevel_print_object($build, '$'. $name .'->');
 }
 
 function devel_elements_page() {
@@ -294,4 +296,3 @@ function devel_phpinfo() {
   print phpinfo();
   drupal_exit();
 }
-

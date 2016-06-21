@@ -28,7 +28,7 @@ function devel_drush_command() {
   $items['fn-hook'] = array(
     'description' => 'List implementations of a given hook and explore the source of the selected one.',
     'arguments' => array(
-      'hook' => 'The name of the hook to explore (e.g. "menu" for hook_menu()).',
+      'hook' => 'The name of the hook to explore (e.g. "menu" for hook_menu()).'
     ),
     'examples' => array(
       'fn-hook cron' => 'List implementations of hook_cron().',
@@ -49,7 +49,7 @@ function devel_drush_command() {
     'examples' => array(
       'fn-view drupal_set_breadcrumb' => 'View the source code for function "drupal_set_breadcrumb"',
       'vi `drush --pipe fn-view user_access --format=\'+!startline !file\'`' => 'Edit the file that contains the function "user_access"',
-      'fn-view NodeController::load' => 'View the source code for method load in the class NodeController',
+      'fn-view NodeController::load' => 'View the source code for method load in the class NodeController'
     ),
     'aliases' => array('fnv'),
     'required-arguments' => 1,
@@ -57,8 +57,7 @@ function devel_drush_command() {
   $items['devel-token'] = array(
     'description' => dt('List available tokens'),
     'aliases' => array('token'),
-    // Remove once 3.0 is released.
-    'core' => array(7),
+    'core' => array(7), // Remove once 3.0 is released.
     //@todo support --format option for json, csv, etc.
   );
   return $items;
@@ -173,6 +172,7 @@ function drush_devel_token() {
   drush_print_table($rows, TRUE);
 }
 
+
 /**
  * Print the specified function, including any
  * doxygen-style comments that come before it.
@@ -180,13 +180,13 @@ function drush_devel_token() {
 function _drush_devel_print_function($file, $start_line, $end_line) {
   $line_num = 0;
   $doxygen = NULL;
-  $fp = fopen($file, 'r');
+  $fp = fopen( $file, 'r' );
 
   while (!feof($fp) && ($line_num < ($start_line - 1))) {
     $line = fgets($fp);
     ++$line_num;
 
-    if (substr($line, 0, 3) == '/**') {
+    if (substr($line,0,3) == '/**') {
       $doxygen = $line;
     }
     elseif (isset($doxygen)) {
@@ -205,4 +205,3 @@ function _drush_devel_print_function($file, $start_line, $end_line) {
     drush_print(rtrim($line));
   }
 }
-

@@ -7,9 +7,13 @@ function devel_enable() {
   $t = get_t();
 
   // New module weights in core: put devel as the very last in the chain.
-  db_update('system')->fields(array(
+  db_update('system')
+    ->fields(array(
       'weight' => 88,
-    ))->condition('type', 'module')->condition('name', 'devel')->execute();
+    ))
+    ->condition('type', 'module')
+    ->condition('name', 'devel')
+    ->execute();
 
   // Create a custom menu, if Menu module is enabled.
   // @see devel_modules_installed()
@@ -69,7 +73,9 @@ function devel_update_7000() {
  * Rebuild the menus since everything is defined by devel_menu().
  */
 function devel_update_7001() {
-  db_delete('menu_links')->condition('module', 'devel')->execute();
+  db_delete('menu_links')
+    ->condition('module', 'devel')
+    ->execute();
   variable_set('menu_rebuild_needed', TRUE);
   return t('Devel module menu links will be rebuilt.');
 }
@@ -78,8 +84,7 @@ function devel_update_7001() {
  * Remove deprecated variables - dev_query, devel_code_coverage
  */
 function devel_update_7002() {
-  // Sad trombone. http://drupalcode.org/viewvc/drupal/drupal/includes/database.mysql.inc?revision=1.2&view=markup
-  variable_del('dev_query');
+  variable_del('dev_query'); // Sad trombone. http://drupalcode.org/viewvc/drupal/drupal/includes/database.mysql.inc?revision=1.2&view=markup
   variable_del('devel_code_coverage');
 }
 
@@ -128,4 +133,3 @@ function devel_update_7006() {
 
   variable_del('dev_mem');
 }
-

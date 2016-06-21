@@ -22,4 +22,3 @@ function devel_rules_action_info() {
 function devel_rules_debug_action($value) {
   dpm($value);
 }
-

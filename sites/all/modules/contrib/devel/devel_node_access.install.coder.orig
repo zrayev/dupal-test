@@ -11,4 +11,3 @@ function devel_node_access_uninstall() {
     menu_delete($devel_menu);
   }
 }
-
