@@ -132,6 +132,13 @@ function custom_menu_menu() {
 /**
  * Page callback.
  **/
+function custom_menu_page_callback() {
+  return ('Under development..');
+}
+
+/**
+ * Page callback.
+ **/
 function custom_menu_system_page_callback() {
   return ('Successful:)');
 }
