@@ -1,6 +1,35 @@
 <?php
 
 /**
+ * Implements hook_permission().
+ *
+ * Provides a demonstration access string.
+ */
+function custom_menu_permission() {
+  return [
+    'select user' => [
+      'title' => 'Access the protected select user',
+    ],
+
+    'edit user' => [
+      'title' => 'Access the protected edit user',
+    ],
+
+    'delete user' => [
+      'title' => 'Access the protected delete user',
+    ],
+
+    'damp SQL' => [
+      'title' => 'Access the protected damp SQL',
+    ],
+
+    'run CRON' => [
+      'title' => 'Access the protected run CRON',
+    ],
+  ];
+}
+
+/**
  * Implements hook_menu().
  */
 function custom_menu_menu() {
@@ -9,7 +38,91 @@ function custom_menu_menu() {
     'title' => 'Menu DZ',
     'description' => 'Simplest possible menu type, and the parent menu entry for others',
     'page callback' => 'custom_menu_page_callback',
+    'weight' => '10',
     'access callback' => TRUE,
+    'expanded' => TRUE,
+  ];
+
+  $items['admin/menu_custom/system'] = [
+    'title' => 'System',
+    'description' => 'System menu',
+    'page callback' => 'custom_menu_system_page_callback',
+    'access callback' => TRUE,
+    'expanded' => TRUE,
+  ];
+
+  $items['admin/menu_custom/profile'] = [
+    'title' => 'Profile',
+    'description' => 'Profile menu',
+    'page callback' => 'custom_menu_profile_page_callback',
+    'access callback' => TRUE,
+    'expanded' => TRUE,
+  ];
+
+  $items['admin/menu_custom/profile/show'] = [
+    'title' => 'Show profile',
+    'description' => 'Show my profile',
+    'page callback' => 'custom_menu_profile_page_callback',
+    'access callback' => TRUE,
+    'expanded' => TRUE,
+    'weight' => '1',
+  ];
+
+  $items['admin/menu_custom/profile/edit'] = [
+    'title' => 'Edit profile',
+    'description' => 'Edit my profile',
+    'page callback' => 'custom_menu_profile_page_callback',
+    'access callback' => TRUE,
+    'expanded' => TRUE,
+    'weight' => '2',
+  ];
+
+  $items['admin/menu_custom/profile/select_user'] = [
+    'title' => 'Administration profiles',
+    'description' => 'Administration users profiles',
+    'page callback' => 'custom_menu_profile_page_callback',
+    'access arguments' => ['select user'],
+    'expanded' => TRUE,
+    'weight' => '3',
+  ];
+
+  $items['admin/menu_custom/profile/select_user/edit'] = [
+    'title' => 'Edit profile',
+    'description' => 'Edit user profile',
+    'page callback' => 'custom_menu_profile_page_callback',
+    'access arguments' => ['edit user'],
+    'expanded' => TRUE,
+  ];
+
+  $items['admin/menu_custom/profile/select_user/delete'] = [
+    'title' => 'Delete profile',
+    'description' => 'Delete user profile',
+    'page callback' => 'custom_menu_profile_page_callback',
+    'access arguments' => ['delete user'],
+    'expanded' => TRUE,
+  ];
+
+  $items['admin/menu_custom/system/cc'] = [
+    'title' => 'Clear cache',
+    'description' => 'Clear cache ',
+    'page callback' => 'custom_menu_system_page_callback',
+    'access callback' => TRUE,
+    'expanded' => TRUE,
+  ];
+
+  $items['admin/menu_custom/system/dampDB'] = [
+    'title' => 'Damp DB',
+    'description' => 'Damp MySQL database',
+    'page callback' => 'custom_menu_system_page_callback',
+    'access arguments' => ['damp SQL'],
+    'expanded' => TRUE,
+  ];
+
+  $items['admin/menu_custom/system/runCRON'] = [
+    'title' => 'Run CRON',
+    'description' => 'Run CRON action',
+    'page callback' => 'custom_menu_system_page_callback',
+    'access arguments' => ['run CRON'],
     'expanded' => TRUE,
   ];
 
@@ -17,8 +130,15 @@ function custom_menu_menu() {
 }
 
 /**
-* Page callback.
-**/
-function custom_menu_page_callback() {
-  return ('Hello! I\'m your first page!');
+ * Page callback.
+ **/
+function custom_menu_system_page_callback() {
+  return ('Successful:)');
+}
+
+/**
+ * Page callback.
+ **/
+function custom_menu_profile_page_callback() {
+  return ('Hello!');
 }
