@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * Implements hook_menu().
+ */
+function custom_menu_menu() {
+
+  $items['admin/menu_custom'] = [
+    'title' => 'Menu DZ',
+    'description' => 'Simplest possible menu type, and the parent menu entry for others',
+    'page callback' => 'custom_menu_page_callback',
+    'access callback' => TRUE,
+    'expanded' => TRUE,
+  ];
+
+  return $items;
+}
+
+/**
+* Page callback.
+**/
+function custom_menu_page_callback() {
+  return ('Hello! I\'m your first page!');
+}
