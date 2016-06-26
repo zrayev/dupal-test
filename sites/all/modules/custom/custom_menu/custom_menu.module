@@ -165,3 +165,19 @@ function custom_menu_profile_page_callback() {
 
   return ('Hello!');
 }
+
+/**
+ * Implements hook_menu_alter().
+ */
+function custom_menu_menu_alter(&$items)
+{
+  $items['admin/dashboard']['title'] = 'Panel';
+  $items['admin/content']['title'] = 'Filling';
+  $items['admin/structure']['title'] = 'Architecture';
+  $items['admin/appearance']['title'] = 'Themes';
+  $items['admin/people']['title'] = 'Users';
+  $items['admin/modules']['title'] = 'Mod';
+  $items['admin/config']['title'] = 'Conf';
+  $items['admin/reports']['title'] = 'Return';
+  $items['admin/help']['title'] = 'Support';
+}
