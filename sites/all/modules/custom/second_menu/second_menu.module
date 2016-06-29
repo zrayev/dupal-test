@@ -47,7 +47,6 @@ function custom_menu_menu() {
   $items['admin/menu_custom/system'] = array(
     'title' => 'System',
     'description' => 'System menu',
-    'type' => MENU_LOCAL_TASK,
     'page callback' => 'custom_menu_system_page_callback',
     'access callback' => TRUE,
     'expanded' => TRUE,
@@ -56,7 +55,6 @@ function custom_menu_menu() {
   $items['admin/menu_custom/profile'] = array(
     'title' => 'Profile',
     'description' => 'Profile menu',
-    'type' => MENU_LOCAL_TASK,
     'page callback' => 'custom_menu_profile_page_callback',
     'access callback' => TRUE,
     'expanded' => TRUE,
@@ -92,7 +90,6 @@ function custom_menu_menu() {
   $items['admin/menu_custom/profile/select_user/edit'] = array(
     'title' => 'Edit profile',
     'description' => 'Edit user profile',
-    'type' => MENU_LOCAL_TASK,
     'page callback' => 'custom_menu_profile_page_callback',
     'access arguments' => ['custom menu edit user'],
     'expanded' => TRUE,
@@ -101,7 +98,6 @@ function custom_menu_menu() {
   $items['admin/menu_custom/profile/select_user/delete'] = array(
     'title' => 'Delete profile',
     'description' => 'Delete user profile',
-    'type' => MENU_LOCAL_TASK,
     'page callback' => 'custom_menu_profile_page_callback',
     'access arguments' => ['custom menu delete user'],
     'expanded' => TRUE,
@@ -110,8 +106,7 @@ function custom_menu_menu() {
   $items['admin/menu_custom/system/cc'] = array(
     'title' => 'Clear cache',
     'description' => 'Clear cache ',
-    'type' => MENU_LOCAL_TASK,
-    'page callback' => 'custom_menu_system_cc_page_callback',
+    'page callback' => 'custom_menu_system_page_callback',
     'access callback' => TRUE,
     'expanded' => TRUE,
   );
@@ -119,7 +114,6 @@ function custom_menu_menu() {
   $items['admin/menu_custom/system/dampDB'] = array(
     'title' => 'Damp DB',
     'description' => 'Damp MySQL database',
-    'type' => MENU_LOCAL_TASK,
     'page callback' => 'custom_menu_system_page_callback',
     'access arguments' => ['custom menu damp SQL'],
     'expanded' => TRUE,
@@ -128,16 +122,9 @@ function custom_menu_menu() {
   $items['admin/menu_custom/system/runCRON'] = array(
     'title' => 'Run CRON',
     'description' => 'Run CRON action',
-    'type' => MENU_LOCAL_TASK,
     'page callback' => 'custom_menu_system_page_callback',
     'access arguments' => ['custom menu run CRON'],
     'expanded' => TRUE,
-  );
-
-  $items['get_node/%'] = array(
-    'page callback' => 'custom_menu_node_page_callback',
-    'access callback' => 1,
-    'page arguments' => array(1),
   );
 
   return $items;
@@ -155,21 +142,13 @@ function custom_menu_page_callback() {
 /**
  * Page callback.
  * admin/menu_custom/system
+ * admin/menu_custom/system/cc
  * admin/menu_custom/system/dampDB
  * admin/menu_custom/system/runCRON
  */
 function custom_menu_system_page_callback() {
 
   return ('Successful:)');
-}
-
-/**
- * Page callback.
- * admin/menu_custom/system/cc
- */
-function custom_menu_system_cc_page_callback() {
-
-  return ('Cache was cleared..');
 }
 
 /**
@@ -185,16 +164,6 @@ function custom_menu_system_cc_page_callback() {
 function custom_menu_profile_page_callback() {
 
   return ('Hello!');
-}
-
-/**
- * Page callback.
- *
- */
-function custom_menu_node_page_callback($nid) {
-  $node = node_load($nid);
-
-  return $node->title;
 }
 
 /**
