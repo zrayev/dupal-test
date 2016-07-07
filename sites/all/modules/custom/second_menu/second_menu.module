@@ -6,7 +6,7 @@
 function second_menu_custom_menu_menu($route) {
   $subitems = [];
   if ($route == 'admin/menu_custom') {
-    $subitems['next-first-alter'] = array(
+    $subitems['contact'] = array(
       'title' => 'Contact',
       'access callback' => TRUE,
       'expanded' => TRUE,
