@@ -1,4 +1,4 @@
-name = Custom hook menu
-description = My first custom hook_menu
+name = Second custom hook menu
+description = My second custom hook_menu
 core = 7.x
 package = Custom
