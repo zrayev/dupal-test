@@ -1,0 +1,16 @@
+.show-content {
+    margin-top: 10px;
+    padding-left: 5px;
+    padding-top: 5px;
+}
+
+.title-callback {
+  font-style: italic;
+  margin-top: 10px;
+  font-size: large;
+}
+
+.rendered {
+  background-color: lightblue;
+  border: 2px solid black;
+}
