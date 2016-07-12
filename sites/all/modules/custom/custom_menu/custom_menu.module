@@ -6,9 +6,9 @@
 function custom_menu_theme($existing, $type, $theme, $path) {
   $items = array();
 
-  $items['custom_menu_show_content'] = array(
+  $items['custom_menu_page_content'] = array(
     'variables' => array('title' => NULL,'content' => NULL),
-    'template' => 'templates/block-custom-menu-show-content',
+    'template' => 'templates/custom-menu-custom-page-content',
   );
 
   return $items;
@@ -137,7 +137,6 @@ function custom_menu_menu() {
   $items['get_node/%/show'] = array(
 
     'title callback' => 'node_page_title_from_nid',
-    'title' => 'Show title',
     'title arguments' => [1],
     'page callback' => 'custom_menu_node_page_callback',
     'page arguments' => [1],
@@ -203,9 +202,9 @@ function custom_menu_custom_menu_menu($route) {
 function custom_menu_page_callback() {
 
   return array(
-    '#title' => 'Custom menu',
-    '#content' => 'Whole wound wrote at whose to style in. Figure ye innate former do so we. Shutters but sir yourself provided you required his. So neither related he am do believe. Nothing but you hundred had use regular. Fat sportsmen arranging preferred can. Busy paid like is oh. Dinner our ask talent her age hardly. Neglected collected an attention listening do abilities. ',
-    '#theme' => 'custom_menu_show_content',
+    '#title' => t('Custom menu'),
+    '#content' => t('Whole wound wrote at whose to style in. Figure ye innate former do so we. Shutters but sir yourself provided you required his. So neither related he am do believe. Nothing but you hundred had use regular. Fat sportsmen arranging preferred can. Busy paid like is oh. Dinner our ask talent her age hardly. Neglected collected an attention listening do abilities. '),
+    '#theme' => 'custom_menu_page_content',
   );
 }
 
@@ -218,11 +217,11 @@ function custom_menu_page_callback() {
 function custom_menu_system_page_callback() {
 
   return array(
-    '#title' => 'Successful',
-    '#content' => 'Of be talent me answer do relied. Mistress in on so laughing throwing endeavor occasion welcomed. Gravity sir brandon calling can. No years do widow house delay stand. Prospect six kindness use steepest new ask. High gone kind calm call as ever is. Introduced melancholy estimating motionless on up as do. Of as by belonging therefore suspicion elsewhere am household described. Domestic suitable bachelor for landlord fat. 
+    '#title' => t('Successful'),
+    '#content' => t('Of be talent me answer do relied. Mistress in on so laughing throwing endeavor occasion welcomed. Gravity sir brandon calling can. No years do widow house delay stand. Prospect six kindness use steepest new ask. High gone kind calm call as ever is. Introduced melancholy estimating motionless on up as do. Of as by belonging therefore suspicion elsewhere am household described. Domestic suitable bachelor for landlord fat. 
       Spot of come to ever hand as lady meet on. Delicate contempt received two yet advanced. Gentleman as belonging he commanded believing dejection in by. On no am winding chicken so behaved. Its preserved sex enjoyment new way behaviour. Him yet devonshire celebrated especially. Unfeeling one provision are smallness resembled repulsive. 
-      Insipidity the sufficient discretion imprudence resolution sir him decisively. Proceed how any engaged visitor. Explained propriety off out perpetual his you. Feel sold off felt nay rose met you. We so entreaties cultivated astonished is. Was sister for few longer mrs sudden talent become. Done may bore quit evil old mile. If likely am of beauty tastes. ',
-    '#theme' => 'custom_menu_show_content',
+      Insipidity the sufficient discretion imprudence resolution sir him decisively. Proceed how any engaged visitor. Explained propriety off out perpetual his you. Feel sold off felt nay rose met you. We so entreaties cultivated astonished is. Was sister for few longer mrs sudden talent become. Done may bore quit evil old mile. If likely am of beauty tastes. '),
+    '#theme' => 'custom_menu_page_content',
   );
 }
 
@@ -233,10 +232,10 @@ function custom_menu_system_page_callback() {
 function custom_menu_system_cc_page_callback() {
 
   return array(
-    '#title' => 'Cache was cleared',
-    '#content' => 'Of be talent me answer do relied. Mistress in on so laughing throwing endeavor occasion welcomed. Gravity sir brandon calling can. No years do widow house delay stand. Prospect six kindness use steepest new ask. High gone kind calm call as ever is. Introduced melancholy estimating motionless on up as do. Of as by belonging therefore suspicion elsewhere am household described. Domestic suitable bachelor for landlord fat. 
-      Spot of come to ever hand as lady meet on. Delicate contempt received two yet advanced. Gentleman as belonging he commanded believing dejection in by. On no am winding chicken so behaved. Its preserved sex enjoyment new way behaviour. Him yet devonshire celebrated especially. Unfeeling one provision are smallness resembled repulsive. ',
-    '#theme' => 'custom_menu_show_content',
+    '#title' => t('Cache was cleared'),
+    '#content' => t('Of be talent me answer do relied. Mistress in on so laughing throwing endeavor occasion welcomed. Gravity sir brandon calling can. No years do widow house delay stand. Prospect six kindness use steepest new ask. High gone kind calm call as ever is. Introduced melancholy estimating motionless on up as do. Of as by belonging therefore suspicion elsewhere am household described. Domestic suitable bachelor for landlord fat. 
+      Spot of come to ever hand as lady meet on. Delicate contempt received two yet advanced. Gentleman as belonging he commanded believing dejection in by. On no am winding chicken so behaved. Its preserved sex enjoyment new way behaviour. Him yet devonshire celebrated especially. Unfeeling one provision are smallness resembled repulsive. '),
+    '#theme' => 'custom_menu_page_content',
   );
 }
 
@@ -253,46 +252,41 @@ function custom_menu_system_cc_page_callback() {
 function custom_menu_profile_page_callback() {
 
   return array(
-    '#title' => 'Hello',
-    '#content' => 'Of be talent me answer do relied. Mistress in on so laughing throwing endeavor occasion welcomed. Gravity sir brandon calling can. No years do widow house delay stand. Prospect six kindness use steepest new ask. High gone kind calm call as ever is. Introduced melancholy estimating motionless on up as do. Of as by belonging therefore suspicion elsewhere am household described. Domestic suitable bachelor for landlord fat. 
-      Spot of come to ever hand as lady meet on. Delicate contempt received two yet advanced. Gentleman as belonging he commanded believing dejection in by. On no am winding chicken so behaved. Its preserved sex enjoyment new way behaviour. Him yet devonshire celebrated especially. Unfeeling one provision are smallness resembled repulsive. ',
-    '#theme' => 'custom_menu_show_content',
+    '#title' => t('Hello'),
+    '#content' => t('Of be talent me answer do relied. Mistress in on so laughing throwing endeavor occasion welcomed. Gravity sir brandon calling can. No years do widow house delay stand. Prospect six kindness use steepest new ask. High gone kind calm call as ever is. Introduced melancholy estimating motionless on up as do. Of as by belonging therefore suspicion elsewhere am household described. Domestic suitable bachelor for landlord fat. 
+      Spot of come to ever hand as lady meet on. Delicate contempt received two yet advanced. Gentleman as belonging he commanded believing dejection in by. On no am winding chicken so behaved. Its preserved sex enjoyment new way behaviour. Him yet devonshire celebrated especially. Unfeeling one provision are smallness resembled repulsive. '),
+    '#theme' => 'custom_menu_page_content',
   );
 }
 
 /**
  * Page callback.
- * /get_node/%7
- *
+ * /get_node/%7/show
  * @param $nid
- *
- * @return
+ * @return array
  */
 function custom_menu_node_page_callback($nid) {
   $node = node_load($nid);
 
-//  return $node->title;
   return array(
     '#title' => $node->title,
-    '#content' => 'Title node',
-    '#theme' => 'custom_menu_show_content',
+    '#content' => t('Title node'),
+    '#theme' => 'custom_menu_page_content',
   );
 }
 
 /**
  * Page callback.
  * /admin/menu_custom/help
- *
  * @return null|string
  */
 function custom_menu_help_page_callback() {
 
   return array(
-    '#title' => 'Help page',
-    '#content' => 'We diminution preference thoroughly if. Joy deal pain view much her time. Led young gay would now state. Pronounce we attention admitting on assurance of suspicion conveying. That his west quit had met till. Of advantage he attending household at do perceived. Middleton in objection discovery as agreeable. Edward thrown dining so he my around to. 
+    '#title' => t('Help page'),
+    '#content' => t('We diminution preference thoroughly if. Joy deal pain view much her time. Led young gay would now state. Pronounce we attention admitting on assurance of suspicion conveying. That his west quit had met till. Of advantage he attending household at do perceived. Middleton in objection discovery as agreeable. Edward thrown dining so he my around to. 
       Am of mr friendly by strongly peculiar juvenile. Unpleasant it sufficient simplicity am by friendship no inhabiting. Goodness doubtful material has denoting suitable she two. Dear mean she way and poor bred they come. He otherwise me incommode explained so in remaining. Polite barton in it warmly do county length an. 
-      Fat new smallness few supposing suspicion two. Course sir people worthy horses add entire suffer. How one dull get busy dare far. At principle perfectly by sweetness do. As mr started arrival subject by believe. Strictly numerous outlived kindness whatever on we no on addition. 
-    ',
-    '#theme' => 'custom_menu_show_content',
+      Fat new smallness few supposing suspicion two. Course sir people worthy horses add entire suffer. How one dull get busy dare far. At principle perfectly by sweetness do. As mr started arrival subject by believe. Strictly numerous outlived kindness whatever on we no on addition. '),
+    '#theme' => 'custom_menu_page_content',
   );
 }
