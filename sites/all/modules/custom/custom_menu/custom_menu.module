@@ -11,6 +11,11 @@ function custom_menu_theme($existing, $type, $theme, $path) {
     'template' => 'templates/custom-menu-custom-page-content',
   );
 
+  $items['custom_menu_page_element'] = array(
+    'render element' => 'custom_element',
+    'template' => 'templates/custom-menu-custom-page-element',
+  );
+
   return $items;
 }
 
@@ -195,6 +200,7 @@ function custom_menu_custom_menu_menu($route) {
   return $subitems;
 }
 
+
 /**
  * Page callback.
  * admin/menu_custom
@@ -202,9 +208,16 @@ function custom_menu_custom_menu_menu($route) {
 function custom_menu_page_callback() {
 
   return array(
-    '#title' => t('Custom menu'),
-    '#content' => t('Whole wound wrote at whose to style in. Figure ye innate former do so we. Shutters but sir yourself provided you required his. So neither related he am do believe. Nothing but you hundred had use regular. Fat sportsmen arranging preferred can. Busy paid like is oh. Dinner our ask talent her age hardly. Neglected collected an attention listening do abilities. '),
-    '#theme' => 'custom_menu_page_content',
+    '#theme' => 'custom_menu_page_element',
+    'element1' => array(
+      '#title' => t('Custom menu'),
+      '#theme' => 'custom_menu_page_content'
+    ),
+
+    'element2' => array(
+      '#content' => t('Whole wound wrote at whose to style in. Figure ye innate former do so we. Shutters but sir yourself provided you required his. So neither related he am do believe. Nothing but you hundred had use regular. Fat sportsmen arranging preferred can. Busy paid like is oh. Dinner our ask talent her age hardly. Neglected collected an attention listening do abilities. '),
+      '#theme' => 'custom_menu_page_content',
+    ),
   );
 }
 
@@ -268,10 +281,17 @@ function custom_menu_profile_page_callback() {
 function custom_menu_node_page_callback($nid) {
   $node = node_load($nid);
 
-  return array(
-    '#title' => $node->title,
-    '#content' => t('Title node'),
-    '#theme' => 'custom_menu_page_content',
+    return array(
+      '#theme' => 'custom_menu_page_element',
+      'element1' => array(
+        '#title' => t('Title') . ' - ' . $node->title,
+        '#theme' => 'custom_menu_page_content'
+      ),
+
+      'element2' => array(
+        '#title' => t('Node ID') . ' - ' . $node->nid,
+        '#theme' => 'custom_menu_page_content',
+      ),
   );
 }
 
@@ -283,10 +303,13 @@ function custom_menu_node_page_callback($nid) {
 function custom_menu_help_page_callback() {
 
   return array(
-    '#title' => t('Help page'),
-    '#content' => t('We diminution preference thoroughly if. Joy deal pain view much her time. Led young gay would now state. Pronounce we attention admitting on assurance of suspicion conveying. That his west quit had met till. Of advantage he attending household at do perceived. Middleton in objection discovery as agreeable. Edward thrown dining so he my around to. 
-      Am of mr friendly by strongly peculiar juvenile. Unpleasant it sufficient simplicity am by friendship no inhabiting. Goodness doubtful material has denoting suitable she two. Dear mean she way and poor bred they come. He otherwise me incommode explained so in remaining. Polite barton in it warmly do county length an. 
-      Fat new smallness few supposing suspicion two. Course sir people worthy horses add entire suffer. How one dull get busy dare far. At principle perfectly by sweetness do. As mr started arrival subject by believe. Strictly numerous outlived kindness whatever on we no on addition. '),
-    '#theme' => 'custom_menu_page_content',
+    '#theme' => 'custom_menu_page_element',
+    'element1' => array(
+      '#title' => t('Help page'),
+      '#content' => t('We diminution preference thoroughly if. Joy deal pain view much her time. Led young gay would now state. Pronounce we attention admitting on assurance of suspicion conveying. That his west quit had met till. Of advantage he attending household at do perceived. Middleton in objection discovery as agreeable. Edward thrown dining so he my around to. 
+         Am of mr friendly by strongly peculiar juvenile. Unpleasant it sufficient simplicity am by friendship no inhabiting. Goodness doubtful material has denoting suitable she two. Dear mean she way and poor bred they come. He otherwise me incommode explained so in remaining. Polite barton in it warmly do county length an. 
+         Fat new smallness few supposing suspicion two. Course sir people worthy horses add entire suffer. How one dull get busy dare far. At principle perfectly by sweetness do. As mr started arrival subject by believe. Strictly numerous outlived kindness whatever on we no on addition. '),
+      '#theme' => 'custom_menu_page_content'
+    ),
   );
 }

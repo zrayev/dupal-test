@@ -1,7 +1,7 @@
 .show-content {
-    margin-top: 10px;
-    padding-left: 5px;
-    padding-top: 5px;
+  margin-top: 10px;
+  padding-left: 5px;
+  padding-top: 5px;
 }
 
 .title-callback {
@@ -13,4 +13,12 @@
 .rendered {
   background-color: lightblue;
   border: 2px solid black;
+}
+
+.test-render-element {
+  font-size: large;
+}
+
+.render-content {
+  color: rebeccapurple;
 }
