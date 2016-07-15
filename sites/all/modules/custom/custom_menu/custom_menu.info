@@ -2,4 +2,3 @@ name = Custom hook menu
 description = My first custom hook_menu
 core = 7.x
 package = Custom
-stylesheets[all][] = custom_menu.css
