@@ -214,7 +214,10 @@ function custom_menu_page_callback() {
         drupal_get_path('module', 'custom_menu') . '/css/custom-page-content.css',
         drupal_get_path('module', 'custom_menu') . '/css/custom-page-element.css',
       ),
-    ),
+      'js' => array(
+        'data' => drupal_get_path('module', 'custom_menu') . '/js/first_alert.js',
+        'type' => 'file')
+      ),
     'element1' => array(
       '#title' => t('Custom menu'),
       '#theme' => 'custom_menu_page_content',
