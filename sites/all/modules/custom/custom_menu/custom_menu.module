@@ -209,6 +209,7 @@ function custom_menu_page_callback() {
 
   return array(
     '#theme' => 'custom_menu_page_element',
+//    '#attributes' => array('class' => 'test-render-element'),
     '#attached' => array(
       'css' => array(
         drupal_get_path('module', 'custom_menu') . '/css/custom-page-content.css',
@@ -307,6 +308,10 @@ function custom_menu_node_page_callback($nid) {
 
   return array(
     '#theme' => 'custom_menu_page_element',
+    '#access' => 1,
+    '#attributes' => array(
+       'class' => 'test-render-element',
+    ),
     '#attached' => array(
       'css' => array(
         drupal_get_path('module', 'custom_menu') . '/css/custom-page-content.css',
@@ -347,4 +352,15 @@ function custom_menu_help_page_callback() {
       '#theme' => 'custom_menu_page_content'
     ),
   );
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function custom_menu_preprocess_custom_menu_page_element(&$variables) {
+  $variables['custom_element']['#attributes']['class'][] = 'test-render-element';
+  $variables['attributes_array']['class'] = $variables['custom_element']['#attributes']['class'];
+  if (!empty($variables['attributes_array'])) {
+    $variables['classes_array'] = array_merge($variables['classes_array'], $variables['attributes_array']['class']);
+  }
 }

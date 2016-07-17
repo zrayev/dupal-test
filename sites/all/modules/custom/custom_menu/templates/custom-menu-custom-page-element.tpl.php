@@ -1,4 +1,4 @@
-<div class="test-render-element">
+<div <?php print $attributes; ?> class="<?php print ($classes); ?>">
   <?php if (!empty($custom_element['element1'])): ?>
     <div class="render-content">
       <?php print render($custom_element['element1']); ?>
