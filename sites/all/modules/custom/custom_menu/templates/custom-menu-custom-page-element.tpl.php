@@ -1,11 +1,11 @@
-<div <?php print $attributes; ?> class="<?php print ($classes); ?>">
+<div class="<?php print ($classes_array[1]); ?>">
   <?php if (!empty($custom_element['element1'])): ?>
-    <div class="render-content">
+    <div class="<?php print ($classes_array[2]); ?>">
       <?php print render($custom_element['element1']); ?>
     </div>
   <?php endif; ?>
   <?php if (!empty($custom_element['element2'])): ?>
-    <div class="render-content">
+    <div class="<?php print ($classes_array[2]); ?>">
       <?php print render($custom_element['element2']); ?>
     </div>
   <?php endif; ?>

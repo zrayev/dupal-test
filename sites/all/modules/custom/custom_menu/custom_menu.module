@@ -359,7 +359,21 @@ function custom_menu_help_page_callback() {
  */
 function custom_menu_preprocess_custom_menu_page_element(&$variables) {
   $variables['custom_element']['#attributes']['class'][] = 'test-render-element';
+  $variables['custom_element']['#attributes']['class'][] = 'render-content';
   $variables['attributes_array']['class'] = $variables['custom_element']['#attributes']['class'];
+  if (!empty($variables['attributes_array'])) {
+    $variables['classes_array'] = array_merge($variables['classes_array'], $variables['attributes_array']['class']);
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function custom_menu_preprocess_custom_menu_page_content(&$variables) {
+  $variables['#attributes']['class'][] = 'show-content';
+  $variables['#attributes']['class'][] = 'title-callback';
+  $variables['#attributes']['class'][] = 'rendered';
+  $variables['attributes_array']['class'] = $variables['#attributes']['class'];
   if (!empty($variables['attributes_array'])) {
     $variables['classes_array'] = array_merge($variables['classes_array'], $variables['attributes_array']['class']);
   }
