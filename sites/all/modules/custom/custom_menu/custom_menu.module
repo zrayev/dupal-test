@@ -416,14 +416,108 @@ function custom_menu_block_view($delta = '') {
  * @return mixed
  */
 function custom_menu_example_form($form, &$form_state) {
-  $form['submit'] = array(
+  $form['skills'] = array(
+    '#title' => t('Skills:'),
+    '#type' => 'textarea',
+    '#weight' => 4,
+    '#description' => t ('Enter your professional skills into this field.'),
+    '#attributes' => array(
+      'placeholder' => t('PHP, Git, Drupal 7 ...'),
+    ),
+  );
+
+  $form['relationship'] = array(
+    '#type' => 'select',
+    '#title' => t('Relationship status:'),
+    '#options' => array(
+      'Single' => t('Single'),
+      'Engaged' => t('Engaged'),
+      'Married' => t('Married'),
+      'It\'s complicated' => t('It\'s complicated'),
+      'Actively searching' => t('Actively searching'),
+    ),
+    '#default_value' => '',
+    '#required' => TRUE,
+    '#weight' => 4,
+    '#description' => t('Enter your relationship status into this field.'),
+  );
+
+  $active = array(0 => t('Male'), 1 => t('Female'));
+  $form['sex'] = array(
+    '#type' => 'radios',
+    '#title' => t('Sex:'),
+    '#options' => $active,
+    '#description' => t('Men or women?'),
+    '#required' => TRUE,
+    '#weight' => 3,
+//    '#access' => 'user_is_logged_in',
+  );
+
+  $form['firstName'] = array(
+    '#title' => t('First name:'),
+    '#type' => 'textfield',
+    '#description' => t('Enter your first name into this field.'),
+    '#default_value' => '',
+    '#maxlength' => 255,
+    '#size' => 20,
+    '#attributes' => array(
+      'placeholder' => t('Dmitry'),
+    ),
+    '#weight' => 1,
+    '#required' => TRUE,
+);
+
+  $form['lastName'] = array(
+    '#title' => t('Last name:'),
+    '#type' => 'textfield',
+    '#description' => t('Enter your last name into this field.'),
+    '#default_value' => '',
+    '#maxlength' => 255,
+    '#size' => 20,
+    '#attributes' => array(
+      'placeholder' => t('Zrayev'),
+    ),
+    '#weight' => 2,
+    '#required' => TRUE,
+  );
+
+  $form['actions'] = array(
+    '#type' => 'actions',
+  );
+
+  $form['actions']['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Submit'),
   );
+
+  $form['actions']['cancel'] = array(
+    '#markup' => l(t('Cancel'), 'admin/menu_custom'),
+  );
+
   return $form;
 }
-function my_module_example_form_validate($form, &$form_state) {
-}
 
-function my_module_example_form_submit($form, &$form_state) {
+/**
+ * @param $form
+ * @param $form_state
+ */
+function custom_menu_example_form_validate($form, &$form_state) { }
+
+/**
+ * @param $form
+ * @param $form_state
+ */
+function custom_menu_example_form_submit($form, &$form_state) {
+  $values = $form_state['values'];
+  $sex = $values['sex']  ? "Female" : "Male";
+  $message = t('@firstName @lastName * @sex * @relationship * @skills',
+    array(
+      '@firstName' => $values['firstName'],
+      '@lastName' => $values['lastName'],
+      '@sex' => $sex,
+      '@relationship' => $values['relationship'],
+      '@skills' => $values['skills'],
+    )
+  );
+  drupal_set_message($message);
 }
