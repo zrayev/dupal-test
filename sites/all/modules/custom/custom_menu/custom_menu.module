@@ -378,3 +378,52 @@ function custom_menu_preprocess_custom_menu_page_content(&$variables) {
     $variables['classes_array'] = array_merge($variables['classes_array'], $variables['attributes_array']['class']);
   }
 }
+
+/**
+ * Implements hook_block_info().
+ */
+function custom_menu_block_info() {
+  $blocks['custom_menu_block'] = array(
+    'info' => t('Render system'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ * @param string $delta
+ * @return array
+ */
+function custom_menu_block_view($delta = '') {
+  $block = array();
+
+  switch ($delta) {
+    case 'custom_menu_block':
+      $block['subject'] = 'Render system';
+      $block['content'] = drupal_get_form('custom_menu_example_form');
+
+      break;
+  }
+
+  return $block;
+}
+
+/**
+ * @param $form
+ * @param $form_state
+ * @return mixed
+ */
+function custom_menu_example_form($form, &$form_state) {
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Submit'),
+  );
+  return $form;
+}
+function my_module_example_form_validate($form, &$form_state) {
+}
+
+function my_module_example_form_submit($form, &$form_state) {
+}
