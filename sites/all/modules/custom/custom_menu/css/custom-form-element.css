@@ -1,0 +1,21 @@
+.name-class {
+  width: 100%;
+  font-size: large;
+  color: green;
+  /*padding: -20px;*/
+}
+
+.sex-class {
+  font-size: large;
+  color: rebeccapurple;
+}
+
+.relationship-class {
+  width: 100%;
+  background-color: #f1f1f1;
+}
+
+.skills-class {
+  color: #4c0012;
+  font-size: x-large;
+}
