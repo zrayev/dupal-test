@@ -16,6 +16,11 @@ function custom_menu_theme($existing, $type, $theme, $path) {
     'template' => 'templates/custom-menu-custom-page-element',
   );
 
+  $items['custom_menu_form_element'] = array(
+    'render element' => 'form_element',
+    'template' => 'templates/custom-menu-custom-form-element',
+  );
+
   return $items;
 }
 
@@ -139,6 +144,17 @@ function custom_menu_menu() {
     'expanded' => TRUE,
   );
 
+  $items['form'] = array(
+    'title' => 'User information',
+    'description' => 'render form',
+    'type' => MENU_LOCAL_TASK,
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('custom_menu_example_form'),
+    'access callback' => TRUE,
+    'expanded' => TRUE,
+    'weight' => '10',
+  );
+
   $items['get_node/%/show'] = array(
 
     'title callback' => 'node_page_title_from_nid',
@@ -199,7 +215,6 @@ function custom_menu_custom_menu_menu($route) {
   }
   return $subitems;
 }
-
 
 /**
  * Page callback.
@@ -358,23 +373,202 @@ function custom_menu_help_page_callback() {
  * Implements hook_preprocess_HOOK().
  */
 function custom_menu_preprocess_custom_menu_page_element(&$variables) {
-  $variables['custom_element']['#attributes']['class'][] = 'test-render-element';
-  $variables['custom_element']['#attributes']['class'][] = 'render-content';
-  $variables['attributes_array']['class'] = $variables['custom_element']['#attributes']['class'];
-  if (!empty($variables['attributes_array'])) {
-    $variables['classes_array'] = array_merge($variables['classes_array'], $variables['attributes_array']['class']);
-  }
+  $title_classes = &$variables['title_attributes_array']['class'];
+  $content_classes = &$variables['content_attributes_array']['class'];
+  $title_classes[] = 'test-render-element';
+  $content_classes[] = 'render-content';
 }
 
 /**
  * Implements hook_preprocess_HOOK().
  */
 function custom_menu_preprocess_custom_menu_page_content(&$variables) {
-  $variables['#attributes']['class'][] = 'show-content';
-  $variables['#attributes']['class'][] = 'title-callback';
-  $variables['#attributes']['class'][] = 'rendered';
-  $variables['attributes_array']['class'] = $variables['#attributes']['class'];
-  if (!empty($variables['attributes_array'])) {
-    $variables['classes_array'] = array_merge($variables['classes_array'], $variables['attributes_array']['class']);
-  }
+  $title_classes = &$variables['title_attributes_array']['class'];
+  $content_classes = &$variables['content_attributes_array']['class'];
+  $classes = &$variables['classes_array'];
+  $classes[] = 'rendered';
+  $title_classes[] = 'title-callback';
+  $content_classes[] = 'show-content';
+}
+
+/**
+ * Implements hook_block_info().
+ */
+//function custom_menu_block_info() {
+//  $blocks['custom_menu_block'] = array(
+//    'info' => t('Render system'),
+//    'cache' => DRUPAL_NO_CACHE,
+//  );
+//
+//  return $blocks;
+//}
+
+/**
+ * Implements hook_block_view().
+ * @param string $delta
+ * @return array
+ */
+//function custom_menu_block_view($delta = '') {
+//  $block = array();
+//
+//  switch ($delta) {
+//    case 'custom_menu_block':
+//      $block['subject'] = 'Render system';
+//    break;
+//  }
+//
+//  return $block;
+//}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ * @param $variables
+ */
+function custom_menu_preprocess_custom_menu_form_element(&$variables) {
+  $variables['form_element']['custom_menu_firstName']['#attributes']['class'][] = 'name-class';
+  $variables['form_element']['custom_menu_lastName']['#attributes']['class'][] = 'name-class';
+  $variables['form_element']['custom_menu_sex']['#attributes']['class'][] = 'sex-class';
+  $variables['form_element']['custom_menu_relationship']['#attributes']['class'][] = 'relationship-class';
+  $variables['form_element']['custom_menu_skills']['#attributes']['class'][] = 'skills-class';
+}
+
+/**
+ * @param $form
+ * @param $form_state
+ * @return mixed
+ */
+function custom_menu_example_form($form, &$form_state) {
+  $form = array();
+
+  $form['userinfo'] = array(
+    '#title' => t('User Information'),
+    '#description' => t('You can add some information about yourself here:'),
+    '#type' => 'form_element',
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+    '#tree' => TRUE,
+    '#attached' => array(
+      'css' => array(
+        drupal_get_path('module', 'custom_menu') . '/css/custom-form-element.css',
+      ),
+      'js' => array(
+        drupal_get_path('module', 'custom_menu') . '/js/first_alert.js',
+      ),
+    ),
+    '#theme' => 'custom_menu_form_element',
+  );
+
+  $form['userinfo']['custom_menu_skills'] = array(
+    '#title' => t('Skills:'),
+    '#type' => 'textarea',
+    '#default_value' => variable_get('custom_menu_skills','Git, Drupal, php..'),
+    '#weight' => 4,
+    '#description' => t ('Enter your professional skills into this field.'),
+    '#attributes' => array(
+      'placeholder' => t('PHP, Git, Drupal 7 ...'),
+    ),
+  );
+
+  $form['userinfo']['custom_menu_relationship'] = array(
+    '#type' => 'select',
+    '#title' => t('Relationship status:'),
+    '#options' => array(
+      'Single' => t('Single'),
+      'Engaged' => t('Engaged'),
+      'Married' => t('Married'),
+      'It\'s complicated' => t('It\'s complicated'),
+      'Actively searching' => t('Actively searching'),
+    ),
+    '#default_value' => variable_get('custom_menu_relationship', 'Actively searching'),
+    '#required' => TRUE,
+    '#weight' => 4,
+    '#description' => t('Enter your relationship status into this field.')
+  );
+
+  $active = array(0 => t('Male'), 1 => t('Female'));
+  $form['userinfo']['custom_menu_sex'] = array(
+    '#type' => 'radios',
+    '#title' => t('Sex:'),
+    '#options' => $active,
+    '#default_value' => variable_get('custom_menu_sex', 0),
+    '#description' => t('Men or women?'),
+    '#required' => TRUE,
+    '#weight' => 3,
+//    '#access' => 'user_is_logged_in',
+  );
+
+  $form['userinfo']['custom_menu_firstName'] = array(
+    '#title' => t('First name:'),
+    '#type' => 'textfield',
+    '#description' => t('Enter your first name into this field.'),
+    '#default_value' => variable_get('custom_menu_firstName','Piter'),
+    '#maxlength' => 255,
+    '#size' => 20,
+    '#attributes' => array(
+      'placeholder' => t('Dmitry'),
+    ),
+    '#weight' => 1,
+    '#required' => TRUE,
+);
+
+  $form['userinfo']['custom_menu_lastName'] = array(
+    '#title' => t('Last name:'),
+    '#type' => 'textfield',
+    '#description' => t('Enter your last name into this field.'),
+    '#default_value' => variable_get('custom_menu_lastName','Pen'),
+    '#maxlength' => 255,
+    '#size' => 20,
+    '#attributes' => array(
+      'placeholder' => t('Zrayev'),
+    ),
+    '#weight' => 2,
+    '#required' => TRUE,
+  );
+
+  $form['actions'] = array(
+    '#type' => 'actions',
+  );
+
+  $form['actions']['custom_menu_submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Submit'),
+  );
+
+  $form['actions']['cancel'] = array(
+    '#markup' => l(t('Cancel'), 'form'),
+  );
+
+  return $form;
+}
+
+/**
+ * @param $form
+ * @param $form_state
+ */
+function custom_menu_example_form_validate($form, &$form_state) { }
+
+/**
+ * @param $form
+ * @param $form_state
+ */
+function custom_menu_example_form_submit($form, &$form_state) {
+  $values = $form_state['values']['userinfo'];
+  $sex = $values['custom_menu_sex']  ? "Female" : "Male";
+  $message = t('@firstName @lastName * @sex * @relationship * @skills',
+    array(
+      '@firstName' => $values['custom_menu_firstName'],
+      '@lastName' => $values['custom_menu_lastName'],
+      '@sex' => $sex,
+      '@relationship' => $values['custom_menu_relationship'],
+      '@skills' => $values['custom_menu_skills'],
+    )
+  );
+
+  $setFitstName='Dmitry';
+  variable_set('custom_menu_firstName',$setFitstName);
+
+  $setLastName='Zrayev';
+  variable_set('custom_menu_lastName',$setLastName);
+
+  drupal_set_message($message);
 }
