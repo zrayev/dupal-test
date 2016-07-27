@@ -525,6 +525,17 @@ function custom_menu_example_form($form, &$form_state) {
     '#required' => TRUE,
   );
 
+  $form['userinfo']['custom_menu_date'] = array(
+    '#title' => t('Date of Birth:'),
+    '#type' => 'date',
+    '#default_value' => array(
+    'day' => 24,
+    'month' => 5,
+    'year' => 1902,
+  ),
+    '#element_validate' => array('date_validate'),
+  );
+
   $form['actions'] = array(
     '#type' => 'actions',
   );
@@ -534,8 +545,26 @@ function custom_menu_example_form($form, &$form_state) {
     '#value' => t('Submit'),
   );
 
-  $form['actions']['cancel'] = array(
-    '#markup' => l(t('Cancel'), 'form'),
+  $form['actions']['custom_menu_submit_test'] = array(
+    '#type' => 'submit',
+    '#value' => t('Second submit'),
+    '#submit' => array(
+      'custom_menu_example_form_submit_custom'),
+  );
+
+  $form['actions']['custom_menu_cancel'] = array(
+    '#type' => 'submit',
+    '#value' => t('Cancel'),
+    '#limit_validation_errors' => array(),
+    '#submit' => array(
+      'custom_menu_example_form_custom_cancel'),
+  );
+
+  $form['actions']['custom_menu_run_submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Run Submit'),
+    '#submit' => array(
+      'custom_menu_example_form_submit'),
   );
 
   return $form;
@@ -545,7 +574,18 @@ function custom_menu_example_form($form, &$form_state) {
  * @param $form
  * @param $form_state
  */
-function custom_menu_example_form_validate($form, &$form_state) { }
+function custom_menu_example_form_validate($form, &$form_state) {
+  $values = $form_state['values']['userinfo'];
+  if ($values['custom_menu_firstName'] == 'Alex') {
+    form_set_error('custom_menu_firstName', t('You must select a name.'));
+  }
+  elseif ($values['custom_menu_date']['year'] < '1950') {
+    form_set_error('year', t('@name, enter your correct date of birth!', array('@name' => $values['custom_menu_firstName'])));
+  }
+  elseif ($values['custom_menu_date']['year'] > '1998') {
+    form_set_error('year', t('@name, enter your correct date of birth!', array('@name' => $values['custom_menu_firstName'])));
+  }
+}
 
 /**
  * @param $form
@@ -554,13 +594,16 @@ function custom_menu_example_form_validate($form, &$form_state) { }
 function custom_menu_example_form_submit($form, &$form_state) {
   $values = $form_state['values']['userinfo'];
   $sex = $values['custom_menu_sex']  ? "Female" : "Male";
-  $message = t('@firstName @lastName * @sex * @relationship * @skills',
+  $message = t('@firstName @lastName * @sex * @date * @relationship * @skills',
     array(
       '@firstName' => $values['custom_menu_firstName'],
       '@lastName' => $values['custom_menu_lastName'],
       '@sex' => $sex,
       '@relationship' => $values['custom_menu_relationship'],
       '@skills' => $values['custom_menu_skills'],
+      '@date' => $values['custom_menu_date']['day'] . '.' .
+        $values['custom_menu_date']['month'] . '.' .
+        $values['custom_menu_date']['year'],
     )
   );
 
@@ -571,4 +614,20 @@ function custom_menu_example_form_submit($form, &$form_state) {
   variable_set('custom_menu_lastName',$setLastName);
 
   drupal_set_message($message);
+}
+
+/**
+ * @param $form
+ * @param $form_state
+ */
+function custom_menu_example_form_submit_custom($form, &$form_state) {
+  drupal_set_message(t('Custom submit works'));
+}
+
+/**
+ * @param $form
+ * @param $form_state
+ */
+function custom_menu_example_form_submit_cancel($form, &$form_state) {
+  drupal_goto('node/2');
 }
