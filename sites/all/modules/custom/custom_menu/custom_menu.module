@@ -548,6 +548,7 @@ function custom_menu_example_form($form, &$form_state) {
   $form['actions']['custom_menu_submit_test'] = array(
     '#type' => 'submit',
     '#value' => t('Second submit'),
+    '#limit_validation_errors' => array(),
     '#submit' => array(
       'custom_menu_example_form_submit_custom'),
   );
@@ -555,16 +556,18 @@ function custom_menu_example_form($form, &$form_state) {
   $form['actions']['custom_menu_cancel'] = array(
     '#type' => 'submit',
     '#value' => t('Cancel'),
+    '#access' => TRUE,
     '#limit_validation_errors' => array(),
     '#submit' => array(
-      'custom_menu_example_form_custom_cancel'),
+      'custom_menu_example_form_submit_cancel'),
   );
 
   $form['actions']['custom_menu_run_submit'] = array(
     '#type' => 'submit',
-    '#value' => t('Run Submit'),
+    '#value' => t('Run cancel'),
+    '#limit_validation_errors' => array(),
     '#submit' => array(
-      'custom_menu_example_form_submit'),
+      'custom_menu_example_form_submit_cancel'),
   );
 
   return $form;
