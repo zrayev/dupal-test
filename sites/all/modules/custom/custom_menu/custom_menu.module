@@ -443,7 +443,7 @@ function custom_menu_example_form($form, &$form_state) {
   $form['userinfo'] = array(
     '#title' => t('User Information'),
     '#description' => t('You can add some information about yourself here:'),
-    '#type' => 'form_element',
+    '#type' => 'fieldset',
     '#collapsible' => TRUE,
     '#collapsed' => FALSE,
     '#tree' => TRUE,
@@ -508,6 +508,7 @@ function custom_menu_example_form($form, &$form_state) {
       'placeholder' => t('Dmitry'),
     ),
     '#weight' => 1,
+    '#element_validate' => array('custom_menu_example_form_name_validate'),
     '#required' => TRUE,
 );
 
@@ -533,7 +534,9 @@ function custom_menu_example_form($form, &$form_state) {
     'month' => 5,
     'year' => 1902,
   ),
-    '#element_validate' => array('date_validate'),
+    '#element_validate' => array(
+      'date_validate',
+      'custom_menu_example_form_date_validate'),
   );
 
   $form['actions'] = array(
@@ -574,19 +577,30 @@ function custom_menu_example_form($form, &$form_state) {
 }
 
 /**
- * @param $form
+ * @param $element
  * @param $form_state
+ * @param $form
  */
-function custom_menu_example_form_validate($form, &$form_state) {
-  $values = $form_state['values']['userinfo'];
-  if ($values['custom_menu_firstName'] == 'Alex') {
-    form_set_error('custom_menu_firstName', t('You must select a name.'));
+function custom_menu_example_form_name_validate($element, &$form_state, $form) {
+  $value = $element['#value'];
+  if (isset($value)&&$value == 'Alex') {
+    form_set_error('userinfo][custom_menu_firstName', t('You must select a first name.'));
   }
-  elseif ($values['custom_menu_date']['year'] < '1950') {
-    form_set_error('year', t('@name, enter your correct date of birth!', array('@name' => $values['custom_menu_firstName'])));
+}
+
+/**
+ * @param $element
+ * @param $form_state
+ * @param $form
+ */
+function custom_menu_example_form_date_validate($element, &$form_state, $form) {
+
+  $value = $element['#value']['year'];
+  if (isset($value)&&$value < '1950') {
+    form_set_error('userinfo][custom_menu_date', t('Enter your correct date of birth!'));
   }
-  elseif ($values['custom_menu_date']['year'] > '1998') {
-    form_set_error('year', t('@name, enter your correct date of birth!', array('@name' => $values['custom_menu_firstName'])));
+  elseif (isset($value)&&$value > '1998') {
+    form_set_error('userinfo][custom_menu_date', t('Enter your correct date of birth!'));
   }
 }
 
@@ -609,12 +623,8 @@ function custom_menu_example_form_submit($form, &$form_state) {
         $values['custom_menu_date']['year'],
     )
   );
-
-  $setFitstName='Dmitry';
-  variable_set('custom_menu_firstName',$setFitstName);
-
-  $setLastName='Zrayev';
-  variable_set('custom_menu_lastName',$setLastName);
+  variable_set('custom_menu_firstName', ($form_state['values']['userinfo']['custom_menu_firstName']));
+  variable_set('custom_menu_lastName', ($form_state['values']['userinfo']['custom_menu_lastName']));
 
   drupal_set_message($message);
 }
@@ -632,5 +642,5 @@ function custom_menu_example_form_submit_custom($form, &$form_state) {
  * @param $form_state
  */
 function custom_menu_example_form_submit_cancel($form, &$form_state) {
-  drupal_goto('node/2');
+  $form_state['redirect'] = 'node/2';
 }
